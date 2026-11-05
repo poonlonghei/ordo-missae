@@ -3,7 +3,6 @@
 A mobile-first, trilingual daily lectionary and missal companion. It presents:
 
 - Daily readings and prayers in Traditional Chinese.
-- Yale Cantonese romanization over the Chinese text.
 - Matching official English readings from the US Lectionary, or NABRE text when a
   Lectionary match is unavailable.
 - Mass prayers and the Ordinary in Traditional Chinese, English, and Latin.
@@ -18,8 +17,6 @@ deployment artifact and are not committed to the repository.
 
 ```text
 catholic-dlc.org.hk/mtYYMMDD.htm ──► scripts/lib/dlc.mjs
-                                          │
-overrides.json ──► to-jyutping ──► scripts/lib/yale.mjs
                                           │
 bible.usccb.org ──► scripts/lib/lectionary.mjs / scripts/lib/nabre.mjs
                                           │
@@ -40,9 +37,6 @@ bible.usccb.org ──► scripts/lib/lectionary.mjs / scripts/lib/nabre.mjs
   (願主與你們同在 … 主，願光榮歸於你 … 基督，我們讚美你), and the psalm refrain
   after every strophe. English carries the corresponding parts from the US Missal,
   including the Lectionary's “A reading from …” line.
-- **Romanization.** `to-jyutping` gives word-aware Jyutping; a small converter turns it
-  into Yale with diacritics (tone 1 = macron). Add a word to `overrides.json` to fix a
-  mispronunciation.
 - **English.** Readings, psalms, and Gospels use official text only. If the USCCB daily
   readings page for the same date matches the Chinese citation (80% verse overlap or
   more), its Lectionary wording is used. Otherwise the cited verses are taken from
@@ -55,9 +49,9 @@ bible.usccb.org ──► scripts/lib/lectionary.mjs / scripts/lib/nabre.mjs
 - **Latin day name.** Memorials, feasts, and solemnities come from the General Roman
   Calendar table in `scripts/lib/sanctoral.mjs`, but only when the Hong Kong title names
   the same saint. Otherwise the appropriate ferial, Sunday, or octave title is shown.
-- **App.** `site/` is plain HTML/CSS/JS with date navigation, Yale and Chinese text-size
-  controls, separate reading and prayer views, dark mode, a service worker, and an
-  installable web app. The page uses `translate="no"` and English blocks use `lang="en"`.
+- **App.** `site/` is plain HTML/CSS/JS with date navigation, Chinese text-size controls,
+  separate reading and prayer views, dark mode, a service worker, and an installable web
+  app. The page uses `translate="no"` and English blocks use `lang="en"`.
 
 ## Deploy to GitHub Pages
 
@@ -109,9 +103,8 @@ Fetched pages and NABRE chapters are cached under `cache/`, which is git-ignored
 ## Project layout
 
 - `site/` — application shell, styles, About page, and Ordinary of the Mass sources.
-- `scripts/` — fetchers, parsers, romanization, and the static build.
+- `scripts/` — fetchers, parsers, and the static build.
 - `test/` — parser and integration-focused unit tests with HTML fixtures.
-- `overrides.json` — optional word-level corrections for Yale romanization.
 
 ## Licences and sources
 
@@ -119,4 +112,3 @@ Fetched pages and NABRE chapters are cached under `cache/`, which is git-ignored
   Fetched for personal use only; nothing is redistributed beyond the rolling window.
 - NABRE © Confraternity of Christian Doctrine; fetched from bible.usccb.org for personal
   use only.
-- `to-jyutping`: BSD-2-Clause; rime-cantonese lexicon: CC BY 4.0.

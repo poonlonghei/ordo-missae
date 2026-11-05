@@ -181,7 +181,11 @@
   $("themeToggle").onclick = () => { settings.theme = settings.theme === "dark" ? "light" : "dark"; save(); applySettings(); };
 
   document.querySelectorAll(".nav-tab").forEach((tab) => tab.onclick = () => {
-    document.querySelectorAll(".nav-tab").forEach((item) => item.classList.toggle("active", item === tab));
+    document.querySelectorAll(".nav-tab").forEach((item) => {
+      const active = item === tab;
+      item.classList.toggle("active", active);
+      item.toggleAttribute("aria-current", active);
+    });
     const mass = tab.dataset.view === "mass";
     settings.view = mass ? "mass" : "readings";
     if (tab.dataset.view === "about") settings.view = "about";
