@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-Hant" translate="no" class="notranslate">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f6f1e8">
+  <meta name="google" content="notranslate">
+  <title>Ordo Missæ · 彌撒經書</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">
+      <span class="brand-mark">✠</span>
+      <div>
+        <p class="eyebrow">ORDO MISSÆ</p>
+        <h1>彌撒經書</h1>
+      </div>
+    </div>
+    <button id="themeToggle" class="icon-button" aria-label="Toggle dark mode">◐</button>
+  </header>
+
+  <nav class="primary-nav" aria-label="Main navigation">
+    <button class="nav-tab active" data-view="readings">每日讀經 <span>Daily Readings</span></button>
+    <button class="nav-tab" data-view="mass">彌撒常規 <span>Order of Mass</span></button>
+  </nav>
+
+  <section id="readingsView" class="view">
+    <div class="date-bar">
+      <button id="prev" class="round-button" aria-label="Previous day">←</button>
+      <button id="today" class="date-button"><span id="dateText">…</span><small>香港教區 · Hong Kong</small></button>
+      <button id="next" class="round-button" aria-label="Next day">→</button>
+    </div>
+    <div class="reading-tools">
+      <button id="tRead" class="tool-button" aria-pressed="true"><b>讀</b> 中文 / English</button>
+      <button id="tProp" class="tool-button" aria-pressed="false"><b>禱</b> 禱文</button>
+    </div>
+    <main id="main"><p class="muted">載入中…</p></main>
+    <footer id="src" class="source"></footer>
+  </section>
+
+  <section id="massView" class="view" hidden>
+    <div class="mass-intro">
+      <p class="eyebrow">THE ROMAN MISSAL · MISSAL ROMANUM</p>
+      <h2>主日及平日彌撒常規</h2>
+      <p>Ordinary of the Mass · Ordo Missæ</p>
+      <label class="mass-language">Language / 語言
+        <select id="massLanguage">
+          <option value="zh">繁體中文</option>
+          <option value="la">Latine</option>
+          <option value="en">English</option>
+        </select>
+      </label>
+    </div>
+    <main id="massMain"></main>
+  </section>
+  <script src="app.js"></script>
+</body>
+</html>

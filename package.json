@@ -1,0 +1,16 @@
+{
+  "name": "canto-daily-readings",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Hong Kong Diocese daily Mass readings with Yale Cantonese ruby and English, built for GitHub Pages",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "build:fixture": "node scripts/build.mjs --fixture test/fixtures/mt-sample.htm --dates 2026-02-06 --no-english",
+    "test": "node --test \"test/**/*.test.mjs\""
+  },
+  "engines": { "node": ">=22" },
+  "dependencies": {
+    "to-jyutping": "3.1.1"
+  }
+}

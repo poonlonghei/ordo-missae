@@ -1,0 +1,7 @@
+{
+  "_comment": "Pronunciation overrides passed to to-jyutping's customize(). Key = word, value = space-separated Jyutping, or null to drop a built-in multi-character entry. Keys starting with _ are ignored.",
+  "亞孟": "aa3 mang4",
+  "亞肋路亞": "aa3 lak6 lou6 aa3",
+  "聖詠": "sing3 wing6",
+  "答唱詠": "daap3 coeng3 wing6"
+}
