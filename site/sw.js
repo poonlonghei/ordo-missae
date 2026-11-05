@@ -1,4 +1,4 @@
-const VERSION = "v12";
+const VERSION = "v13";
 const SHELL = ["./", "index.html", "app.js", "style.css", "manifest.json", "icon.svg"];
 
 self.addEventListener("install", (e) => {

@@ -3,6 +3,7 @@
   const HK_OFFSET = 8 * 3600e3;
   const WEEKDAY = ["日", "一", "二", "三", "四", "五", "六"];
   const SETTINGS_KEY = "ordo.settings";
+  const VISIBLE_PROPERS = new Set(["entrance", "offertory", "communion", "postcommunion"]);
   let settings = { read: true, prop: false, massLanguage: "zh", theme: "light", view: "readings" };
 
   try { Object.assign(settings, JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}")); } catch {}
@@ -47,7 +48,8 @@
     for (const section of day.sections || []) {
       if (section.kind === "divider") { html += `<h3 class="divider">${esc(section.label)}</h3>`; continue; }
       if (section.kind === "note") { html += `<p class="note">${esc(section.label)}</p>`; continue; }
-      html += `<article class="${section.proper ? "proper" : "reading"}"><div class="section-head"><h3>${esc(section.label)}</h3>${section.citation ? `<small>${esc(section.citation)}</small>` : ""}</div>`;
+      const properClass = section.proper ? `proper${VISIBLE_PROPERS.has(section.kind) ? " featured-proper" : ""}` : "reading";
+      html += `<article class="${properClass}"><div class="section-head"><h3>${esc(section.label)}</h3>${section.citation ? `<small>${esc(section.citation)}</small>` : ""}</div>`;
       for (const line of section.lines || []) {
         const rubric = /^（[^）]*）$|^或$|^\(.*\)$/.test(line.zh);
         html += `<p class="zh ${rubric ? "rubric" : ""}">${rubric ? esc(line.zh) : lineHtml(line)}</p>`;
@@ -93,10 +95,14 @@
       if (section && part?.text.trim()) section.parts.push({ ...part, text: part.text.trim() });
       part = null;
     };
+    const finishSection = () => {
+      flush();
+      if (section && section.parts.length === 0) sections.pop();
+    };
     for (const rawLine of markdown.split(/\r?\n/)) {
       const line = rawLine.trim();
       if (line.startsWith("### ")) {
-        flush();
+        finishSection();
         section = { title: line.slice(4).trim(), parts: [] };
         sections.push(section);
       } else if (line.startsWith("#### ")) {
@@ -110,7 +116,7 @@
         flush();
       }
     }
-    flush();
+    finishSection();
     return sections;
   }
   const cleanMassText = (text) => text.replace(/\*\*/g, "").replace(/\*/g, "").replace(/`/g, "").trim();
@@ -159,7 +165,8 @@
     $("massMain").innerHTML = sources[0].map((section, index) => `
       <article class="mass-section">
         <div class="mass-section-heading"><span class="section-number">${String(index + 1).padStart(2, "0")}</span><div><h3>${esc(section.title)}</h3><p>${esc(sources[2][index]?.title || "")} · ${esc(sources[1][index]?.title || "")}</p></div></div>
-        <div class="mass-parts">${section.parts.map((part, partIndex) => {
+        <div class="mass-parts">${Array.from({ length: Math.max(section.parts.length, sources[1][index]?.parts.length || 0, sources[2][index]?.parts.length || 0) }, (_, partIndex) => {
+          const part = section.parts[partIndex] || { subtitle: "", text: "" };
           const english = sources[1][index]?.parts[partIndex];
           const latin = sources[2][index]?.parts[partIndex];
           return `<div class="mass-part">${part.subtitle ? `<h4 class="language-zh">${esc(part.subtitle)}</h4>` : ""}${latin?.subtitle ? `<h4 class="language-la" lang="la">${esc(latin.subtitle)}</h4>` : ""}${english?.subtitle ? `<h4 class="language-en" lang="en">${esc(english.subtitle)}</h4>` : ""}<p class="mass-language-text language-zh">${esc(cleanMassText(part.text))}</p>${latin ? `<p class="mass-language-text language-la" lang="la">${esc(cleanMassText(latin.text))}</p>` : ""}${english ? `<p class="mass-language-text language-en" lang="en">${esc(cleanMassText(english.text))}</p>` : ""}</div>`;
@@ -169,7 +176,6 @@
 
   $("prev").onclick = () => show(addDays(current, -1));
   $("next").onclick = () => show(addDays(current, 1));
-  $("today").onclick = () => show(hkToday());
   $("datePicker").onchange = (event) => show(event.target.value);
   $("massLanguage").onchange = (e) => { settings.massLanguage = e.target.value; save(); applySettings(); };
   $("themeToggle").onclick = () => { settings.theme = settings.theme === "dark" ? "light" : "dark"; save(); applySettings(); };
