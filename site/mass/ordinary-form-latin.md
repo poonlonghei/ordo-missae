@@ -2,7 +2,7 @@
 
 ### Ritus Initiales
 
-In nomine Patris, et Filii, et Spiritus Sancti.
+V. In nomine Patris, et Filii, et Spiritus Sancti.
 
 **R. Amen.**
 
