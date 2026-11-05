@@ -116,7 +116,7 @@
         <div class="mass-parts">${section.parts.map((part, partIndex) => {
           const english = sources[1][index]?.parts[partIndex];
           const latin = sources[2][index]?.parts[partIndex];
-          return `<div class="mass-part">${part.subtitle ? `<h4>${esc(part.subtitle)}</h4>` : ""}<p class="mass-language-text language-zh">${esc(cleanMassText(part.text))}</p>${latin ? `<p class="mass-language-text language-la" lang="la">${esc(cleanMassText(latin.text))}</p>` : ""}${english ? `<p class="mass-language-text language-en" lang="en">${esc(cleanMassText(english.text))}</p>` : ""}</div>`;
+          return `<div class="mass-part">${part.subtitle ? `<h4 class="language-zh">${esc(part.subtitle)}</h4>` : ""}${latin?.subtitle ? `<h4 class="language-la" lang="la">${esc(latin.subtitle)}</h4>` : ""}${english?.subtitle ? `<h4 class="language-en" lang="en">${esc(english.subtitle)}</h4>` : ""}<p class="mass-language-text language-zh">${esc(cleanMassText(part.text))}</p>${latin ? `<p class="mass-language-text language-la" lang="la">${esc(cleanMassText(latin.text))}</p>` : ""}${english ? `<p class="mass-language-text language-en" lang="en">${esc(cleanMassText(english.text))}</p>` : ""}</div>`;
         }).join("")}</div>
       </article>`).join("");
   }

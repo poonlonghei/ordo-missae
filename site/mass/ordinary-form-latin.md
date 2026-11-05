@@ -62,6 +62,8 @@ V. Verbum Domini.
 
 #### Evangelium
 
+*(Munda cor meum ac lábia mea, omnípotens Deus, ut sanctum Evangélium tuum digne váleam nuntiáre.)*
+
 V. Dominus vobiscum.
 
 **R. Et cum spiritu tuo.**
@@ -73,6 +75,8 @@ V. Lectio sancti Evangelii secundum N.
 V. Verbum Domini.
 
 **R. Laus tibi, Christe.**
+
+*(Per evangélica dicta deleántur nostra delícta.)*
 
 #### Homilia
 
@@ -180,17 +184,25 @@ V. Pax Domini sit semper vobiscum.
 
 #### Fractio Panis et Agnus Dei
 
+*(Hæc commíxtio Córporis et Sánguinis Dómini nostri Iesu Christi fiat accipiéntibus nobis in vitam ætérnam.)*
+
 Agnus Dei, qui tollis peccata mundi, miserere nobis.
 
 Agnus Dei, qui tollis peccata mundi, miserere nobis.
 
 Agnus Dei, qui tollis peccata mundi, dona nobis pacem.
 
+*(Dómine Iesu Christe, Fili Dei vivi, qui ex voluntáte Patris, cooperánte Spíritu Sancto, per mortem tuam mundum vivificásti: líbera me per hoc sacrosánctum Corpus et Sánguinem tuum ab ómnibus iniquitátibus meis, et univérsis malis: et fac me tuis semper inhærére mandátis, et a te numquam separári permíttas.)*
+
 #### Sancta Communio
 
 V. Ecce Agnus Dei, ecce qui tollit peccata mundi. Beati qui ad cenam Agni vocati sunt.
 
 **R. Domine, non sum dignus ut intres sub tectum meum, sed tantum dic verbo et sanabitur anima mea.**
+
+*(Corpus Christi custódiat me in vitam ætérnam. Amen.)*
+
+*(Sanguis Christi custódiat me in vitam ætérnam. Amen.)*
 
 ### Ritus Conclusionis
 

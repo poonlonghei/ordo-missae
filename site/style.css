@@ -45,17 +45,17 @@ main { max-width: 760px; margin: auto; }
 .noread .en { display: none; } .noprop .proper { display: none; }
 .source { color: var(--muted); font: 11px var(--sans); border-top: 1px solid var(--line); padding-top: 20px; margin-top: 36px; }
 .error-card, .muted { color: var(--muted); padding: 35px 0; }
-.mass-intro { max-width: 760px; margin: 8px auto 42px; padding: 24px 0; border-bottom: 1px solid var(--line); }
+.mass-intro { max-width: 760px; margin: 8px auto 42px; padding: 24px 0; }
 .mass-intro h2 { margin: 9px 0 3px; font-size: 34px; font-weight: 400; }
 .mass-intro > p:last-of-type { margin: 0; color: var(--muted); font-style: italic; }
 .mass-language { display: inline-flex; align-items: center; gap: 10px; margin-top: 20px; color: var(--muted); font: 11px var(--sans); letter-spacing: .08em; }
 .mass-language select { border: 1px solid var(--line); border-radius: 999px; padding: 8px 28px 8px 12px; color: var(--ink); background: var(--paper-2); font: 13px var(--sans); }
-.mass-section { border-bottom: 1px solid var(--line); padding-bottom: 20px; margin-bottom: 30px; }
+.mass-section { padding-bottom: 20px; margin-bottom: 30px; }
 .mass-section-heading { display: flex; gap: 16px; align-items: start; margin-bottom: 22px; }
 .section-number { color: var(--gold); font: 13px var(--sans); letter-spacing: .1em; }
 .mass-section-heading h3 { margin: 0 0 4px; color: var(--red); font-size: 19px; font-weight: 400; }
 .mass-section-heading p { margin: 0; color: var(--muted); font: italic 13px var(--serif); }
-.mass-part { padding: 14px 0 14px 34px; border-top: 1px solid var(--line); }
+.mass-part { padding: 14px 0 14px 34px; }
 .mass-part h4 { margin: 0 0 10px; color: var(--red); font-size: 15px; font-weight: 400; letter-spacing: .08em; }
 .mass-language-text { margin: 0; font-size: 19px; line-height: 1.9; }
 .language-la { color: var(--muted); font: 16px/1.6 var(--serif); }
