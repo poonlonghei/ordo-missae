@@ -3,7 +3,7 @@
   const HK_OFFSET = 8 * 3600e3;
   const WEEKDAY = ["日", "一", "二", "三", "四", "五", "六"];
   const SETTINGS_KEY = "ordo.settings";
-  let settings = { read: true, prop: false, massLanguage: "zh" };
+  let settings = { read: true, prop: false, massLanguage: "zh", theme: "light", view: "readings" };
 
   try { Object.assign(settings, JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}")); } catch {}
   const save = () => { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch {} };
@@ -11,14 +11,15 @@
   const hkToday = () => new Date(Date.now() + HK_OFFSET).toISOString().slice(0, 10);
   const addDays = (iso, n) => { const d = new Date(`${iso}T00:00:00Z`); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
   const fmtDate = (iso) => { const d = new Date(`${iso}T00:00:00Z`); return `${d.getUTCFullYear()}年${d.getUTCMonth() + 1}月${d.getUTCDate()}日 星期${WEEKDAY[d.getUTCDay()]}`; };
+  const validDate = (date) => /^\d{4}-\d{2}-\d{2}$/.test(date);
 
   function applySettings() {
-    document.body.classList.toggle("noread", !settings.read);
-    document.body.classList.toggle("noprop", !settings.prop);
-    $("tRead").setAttribute("aria-pressed", settings.read);
-    $("tProp").setAttribute("aria-pressed", settings.prop);
+    document.body.classList.remove("noread");
+    document.body.classList.add("noprop");
     $("massLanguage").value = settings.massLanguage;
     $("massMain").dataset.language = settings.massLanguage;
+    document.documentElement.dataset.theme = settings.theme;
+    $("datePicker").value = current || hkToday();
   }
 
   const SPEAKER = /^(領|眾|答|主祭|司鐸|讀經員|全體|信友|執事)[：:]\s*/;
@@ -30,7 +31,7 @@
     return label + esc(text);
   }
   function enHtml(section) {
-    if (!section.en || !settings.read) return "";
+    if (!section.en) return "";
     const lines = section.en.lines || section.en.verses?.map((v) => v.text) || [];
     return `<p class="en" lang="en">${lines.map(esc).join(section.kind === "psalm" ? "<br>" : " ")}</p>`;
   }
@@ -58,17 +59,29 @@
   }
 
   let current = null;
+  let requestId = 0;
   async function show(date) {
-    current = date; location.hash = date; $("dateText").textContent = fmtDate(date);
+    if (!validDate(date)) return;
+    current = date;
+    const request = ++requestId;
+    history.replaceState(null, "", `#${date}`);
+    $("dateText").textContent = fmtDate(date);
+    $("datePicker").value = date;
+    $("main").classList.add("loading");
     $("main").innerHTML = `<p class="muted">載入中…</p>`;
     try {
       const response = await fetch(`data/${date}.json`, { cache: "no-cache" });
       if (!response.ok) throw new Error(response.status);
       const day = await response.json();
-      if (current === date) renderReadings(day);
+      if (request === requestId) {
+        renderReadings(day);
+        $("main").classList.remove("loading");
+      }
     } catch {
+      if (request !== requestId) return;
       $("main").innerHTML = `<div class="error-card"><strong>${fmtDate(date)}</strong><br>這一天的讀經尚未發佈，請試試其他日期。</div>`;
       $("src").textContent = "";
+      $("main").classList.remove("loading");
     }
   }
 
@@ -101,6 +114,39 @@
     return sections;
   }
   const cleanMassText = (text) => text.replace(/\*\*/g, "").replace(/\*/g, "").replace(/`/g, "").trim();
+  function renderMarkdown(markdown) {
+    const lines = markdown.split(/\r?\n/);
+    const blocks = [];
+    let paragraph = [];
+    let list = [];
+    const flush = () => {
+      if (paragraph.length) {
+        blocks.push(`<p>${paragraph.map(esc).join(" ")}</p>`);
+        paragraph = [];
+      }
+      if (list.length) {
+        blocks.push(`<ul>${list.map((item) => `<li>${esc(item)}</li>`).join("")}</ul>`);
+        list = [];
+      }
+    };
+    for (const rawLine of lines) {
+      const line = rawLine.trim();
+      const heading = /^(#{1,3})\s+(.+)$/.exec(line);
+      const item = /^[-*]\s+(.+)$/.exec(line);
+      if (!line) { flush(); continue; }
+      if (heading) { flush(); blocks.push(`<h${heading[1].length}>${esc(heading[2])}</h${heading[1].length}>`); }
+      else if (item) { if (paragraph.length) flush(); list.push(item[1]); }
+      else if (/^\*[^*]+\*$/.test(line)) { flush(); blocks.push(`<p class="about-lead">${esc(line.slice(1, -1))}</p>`); }
+      else paragraph.push(line);
+    }
+    flush();
+    $("aboutMain").innerHTML = `<div class="day-heading"><p class="eyebrow">ABOUT · 關於</p></div><article class="about-section">${blocks.join("")}</article>`;
+  }
+  async function renderAbout() {
+    const response = await fetch("about.md", { cache: "no-cache" });
+    if (!response.ok) throw new Error("About content unavailable");
+    renderMarkdown(await response.text());
+  }
   async function renderMass() {
     const [zhResponse, enResponse, laResponse] = await Promise.all([
       fetch("mass/ordinary-form-chinese.md"),
@@ -124,19 +170,28 @@
   $("prev").onclick = () => show(addDays(current, -1));
   $("next").onclick = () => show(addDays(current, 1));
   $("today").onclick = () => show(hkToday());
-  $("tRead").onclick = () => { settings.read = !settings.read; save(); applySettings(); if (current) show(current); };
-  $("tProp").onclick = () => { settings.prop = !settings.prop; save(); applySettings(); };
+  $("datePicker").onchange = (event) => show(event.target.value);
   $("massLanguage").onchange = (e) => { settings.massLanguage = e.target.value; save(); applySettings(); };
-  $("themeToggle").onclick = () => { const dark = document.documentElement.dataset.theme !== "dark"; document.documentElement.dataset.theme = dark ? "dark" : "light"; };
+  $("themeToggle").onclick = () => { settings.theme = settings.theme === "dark" ? "light" : "dark"; save(); applySettings(); };
 
   document.querySelectorAll(".nav-tab").forEach((tab) => tab.onclick = () => {
     document.querySelectorAll(".nav-tab").forEach((item) => item.classList.toggle("active", item === tab));
     const mass = tab.dataset.view === "mass";
-    $("readingsView").hidden = mass; $("massView").hidden = !mass;
+    settings.view = mass ? "mass" : "readings";
+    if (tab.dataset.view === "about") settings.view = "about";
+    save();
+    $("readingsView").hidden = mass || tab.dataset.view === "about";
+    $("massView").hidden = !mass;
+    $("aboutView").hidden = tab.dataset.view !== "about";
     if (mass && !$("massMain").children.length) renderMass().catch(() => { $("massMain").innerHTML = `<p class="error-card">Mass texts could not be loaded.</p>`; });
+    if (tab.dataset.view === "about" && !$("aboutMain").querySelector("h1")) renderAbout().catch(() => { $("aboutMain").innerHTML = `<p class="error-card">About content could not be loaded.</p>`; });
   });
 
+  const hash = location.hash.slice(1);
+  const hashDate = validDate(hash) ? hash : hkToday();
+  const initialView = hash === "mass" || settings.view === "mass" ? "mass" : hash === "about" || settings.view === "about" ? "about" : "readings";
   applySettings();
-  const hashDate = /^#(\d{4}-\d{2}-\d{2})$/.exec(location.hash)?.[1];
-  show(hashDate || hkToday());
+  show(hashDate);
+  if (initialView !== "readings") document.querySelector(`[data-view="${initialView}"]`).click();
+  addEventListener("popstate", () => show(validDate(location.hash.slice(1)) ? location.hash.slice(1) : hkToday()));
 })();

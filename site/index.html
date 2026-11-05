@@ -25,17 +25,15 @@
   <nav class="primary-nav" aria-label="Main navigation">
     <button class="nav-tab active" data-view="readings">每日讀經 <span>Daily Readings</span></button>
     <button class="nav-tab" data-view="mass">彌撒常規 <span>Order of Mass</span></button>
+    <button class="nav-tab" data-view="about">關於 <span>About</span></button>
   </nav>
 
   <section id="readingsView" class="view">
     <div class="date-bar">
       <button id="prev" class="round-button" aria-label="Previous day">←</button>
-      <button id="today" class="date-button"><span id="dateText">…</span><small>香港教區 · Hong Kong</small></button>
+      <label class="date-button" for="datePicker"><span id="dateText">…</span><small>香港教區 · Hong Kong</small><input id="datePicker" type="date" aria-label="Choose reading date"></label>
+      <button id="today" class="round-button" aria-label="Today">Today</button>
       <button id="next" class="round-button" aria-label="Next day">→</button>
-    </div>
-    <div class="reading-tools">
-      <button id="tRead" class="tool-button" aria-pressed="true"><b>讀</b> 中文 / English</button>
-      <button id="tProp" class="tool-button" aria-pressed="false"><b>禱</b> 禱文</button>
     </div>
     <main id="main"><p class="muted">載入中…</p></main>
     <footer id="src" class="source"></footer>
@@ -55,6 +53,9 @@
       </label>
     </div>
     <main id="massMain"></main>
+  </section>
+  <section id="aboutView" class="view" hidden>
+    <main id="aboutMain" class="about-page"><p class="muted">載入中…</p></main>
   </section>
   <script src="app.js"></script>
 </body>
