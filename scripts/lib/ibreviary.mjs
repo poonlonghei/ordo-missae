@@ -258,7 +258,13 @@ export class IBreviary {
       writeFileSync(path, JSON.stringify({ v: CACHE_V, date: iso, lang, dateQuery: q, fetched: new Date().toISOString(), pages }));
     }
     const parsed = parsePages(pages);
-    const out = { url: pages[0]?.url, title: parsed.title, sets: groupSets(parsed.blocks.filter((b) => PROPER.has(b.kind) && b.lines.length)) };
+    const allBlocks = parsed.blocks.filter((b) => b.lines.length);
+    const out = {
+      url: pages[0]?.url,
+      title: parsed.title,
+      sets: groupSets(allBlocks.filter((b) => PROPER.has(b.kind))),
+      allSets: groupSets(allBlocks),
+    };
     if (!this.kindsLogged?.[lang]) { (this.kindsLogged ??= {})[lang] = true; this.log.log(`iBreviary ${lang} ${iso}: blocks ${parsed.blocks.map((b) => `${b.kind}(${b.lines.length})`).join(" ")}`); }
     this.mem.set(key, out);
     return out;
@@ -284,7 +290,7 @@ export class IBreviary {
     en.sets.forEach((set, i) => { const s = score(set); if (s > bestScore) { best = i; bestScore = s; } });
     if (best == null) return { en: null, la: null, title: en.title[0] ?? null };
     const la = await this.page(iso, "la");
-    let laSet = la?.sets[best] ?? la?.sets[0] ?? null;
+    let laSet = la?.allSets[best] ?? la?.allSets[0] ?? null;
     if (laSet && en.sets[best] && JSON.stringify(laSet) === JSON.stringify(en.sets[best])) {
       if (!this.laWarned) { this.laWarned = true; this.failed.push("lang=la returned the English page; Latin language code needs changing"); }
       laSet = null;

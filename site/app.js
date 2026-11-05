@@ -34,6 +34,10 @@
     const lines = section.en.lines || section.en.verses?.map((v) => v.text) || [];
     return `<p class="en" lang="en">${lines.map(esc).join(section.kind === "psalm" ? "<br>" : " ")}</p>`;
   }
+  function laHtml(section) {
+    if (!section.la?.lines?.length) return "";
+    return `<p class="la" lang="la">${section.la.lines.map(esc).join(section.kind === "psalm" ? "<br>" : " ")}</p>`;
+  }
   function renderReadings(day) {
     let html = `<div class="day-heading"><p class="eyebrow">DAILY LECTIONARY · 每日禮儀</p><h2>${esc(day.title?.[0]?.zh || "")}</h2>`;
     for (const title of (day.title || []).slice(1)) html += `<p class="title-sub">${esc(title.zh)}</p>`;
@@ -47,7 +51,7 @@
         const rubric = /^（[^）]*）$|^或$|^\(.*\)$/.test(line.zh);
         html += `<p class="zh ${rubric ? "rubric" : ""}">${rubric ? esc(line.zh) : lineHtml(line)}</p>`;
       }
-      html += enHtml(section) + "</article>";
+      html += laHtml(section) + enHtml(section) + "</article>";
     }
     $("main").innerHTML = html;
     $("src").textContent = day.source?.startsWith("http") ? `來源 ${day.source.replace(/^https?:\/\//, "")} · ${day.generated?.slice(0, 10) || ""}` : "";

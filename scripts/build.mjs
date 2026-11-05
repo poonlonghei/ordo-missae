@@ -181,10 +181,11 @@ for (const date of dates) {
     const m = await ib.match(date, { entrance, communion });
     if (!m.en) return;
     for (const sec of set) {
-      if (!sec.proper) continue;
-      const enB = m.en.find((b) => b.kind === sec.kind);
+      if (sec.proper) {
+        const enB = m.en.find((b) => b.kind === sec.kind);
+        if (enB) sec.en = { source: "iBreviary", citation: enB.citation, lines: enB.lines };
+      }
       const laB = m.la?.find((b) => b.kind === sec.kind);
-      if (enB) sec.en = { source: "iBreviary", citation: enB.citation, lines: enB.lines };
       if (laB) sec.la = { source: "iBreviary", citation: laB.citation, lines: laB.lines };
     }
   }

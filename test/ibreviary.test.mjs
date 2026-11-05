@@ -45,6 +45,7 @@ test("match a HK set and fetch Latin for the same formulary", async () => {
   assert.ok(m.en, "matched");
   assert.equal(m.en.find((b) => b.kind === "collect").lines[0], "May your grace, O Lord, we pray,");
   assert.equal(m.la.find((b) => b.kind === "collect").lines[0], "Tua nos, quaesumus, Domine, gratia semper et praeveniat et sequatur,");
+  assert.ok(m.la.some((b) => b.kind === "reading1"), "Latin readings are retained");
   assert.equal(m.en.find((b) => b.kind === "offertory").lines[0], "Accept, O Lord, the prayers of your faithful", "heading equal to a menu entry survives");
   assert.ok(urls[0].includes("letture.php?lang=en&date=20261016"), "Reading menu fetched first");
   assert.ok(urls[1].includes("s=antifona_colletta&lang=en&date=20261016"), "proper page discovered from the menu");
