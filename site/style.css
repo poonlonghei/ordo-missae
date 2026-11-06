@@ -81,6 +81,11 @@ main { max-width: 820px; margin: auto; }
 #massMain[data-language="zh"] .language-la, #massMain[data-language="zh"] .language-en,
 #massMain[data-language="la"] .language-zh, #massMain[data-language="la"] .language-en,
 #massMain[data-language="en"] .language-zh, #massMain[data-language="en"] .language-la { display: none; }
+#prayersMain[data-language="zh"] .language-la, #prayersMain[data-language="zh"] .language-en,
+#prayersMain[data-language="la"] .language-zh, #prayersMain[data-language="la"] .language-en,
+#prayersMain[data-language="en"] .language-zh, #prayersMain[data-language="en"] .language-la { display: none; }
+#prayersMain[data-section="before"] .prayer-section[data-section="after"],
+#prayersMain[data-section="after"] .prayer-section[data-section="before"] { display: none; }
 @media (max-width: 600px) {
   .site-header, .primary-nav, .view { padding-left: 14px; padding-right: 14px; }
   .site-header { padding-top: 20px; padding-bottom: 16px; }

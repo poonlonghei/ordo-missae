@@ -4,7 +4,7 @@
   const WEEKDAY = ["日", "一", "二", "三", "四", "五", "六"];
   const SETTINGS_KEY = "ordo.settings";
   const VISIBLE_PROPERS = new Set(["entrance", "offertory", "communion", "postcommunion"]);
-  let settings = { read: true, prop: false, massLanguage: "zh", theme: "light", view: "readings" };
+  let settings = { read: true, prop: false, massLanguage: "zh", prayersLanguage: "zh", prayerSection: "before", theme: "light", view: "readings" };
 
   try { Object.assign(settings, JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}")); } catch {}
   const save = () => { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch {} };
@@ -24,6 +24,10 @@
     document.body.classList.add("noprop");
     $("massLanguage").value = settings.massLanguage;
     $("massMain").dataset.language = settings.massLanguage;
+    $("prayersLanguage").value = settings.prayersLanguage;
+    $("prayersMain").dataset.language = settings.prayersLanguage;
+    $("prayerSection").value = settings.prayerSection;
+    $("prayersMain").dataset.section = settings.prayerSection;
     document.documentElement.dataset.theme = settings.theme;
     $("datePicker").value = current || hkToday();
   }
@@ -127,15 +131,18 @@
     return sections;
   }
   const cleanMassText = (text) => text.replace(/\*\*/g, "").replace(/\*/g, "").replace(/`/g, "").trim();
-  function renderMarkdown(markdown) {
+  function renderMarkdown(markdown, target, eyebrow) {
     const lines = markdown.split(/\r?\n/);
     const blocks = [];
     let paragraph = [];
     let list = [];
+    let paragraphLanguage = "";
+    let language = "";
     const flush = () => {
       if (paragraph.length) {
-        blocks.push(`<p>${paragraph.map(esc).join(" ")}</p>`);
+        blocks.push(`<p${paragraphLanguage ? ` class="language-${paragraphLanguage}"` : ""}>${paragraph.map(esc).join(" ")}</p>`);
         paragraph = [];
+        paragraphLanguage = "";
       }
       if (list.length) {
         blocks.push(`<ul>${list.map((item) => `<li>${esc(item)}</li>`).join("")}</ul>`);
@@ -147,18 +154,46 @@
       const heading = /^(#{1,3})\s+(.+)$/.exec(line);
       const item = /^[-*]\s+(.+)$/.exec(line);
       if (!line) { flush(); continue; }
-      if (heading) { flush(); blocks.push(`<h${heading[1].length}>${esc(heading[2])}</h${heading[1].length}>`); }
-      else if (item) { if (paragraph.length) flush(); list.push(item[1]); }
-      else if (/^\*[^*]+\*$/.test(line)) { flush(); blocks.push(`<p class="about-lead">${esc(line.slice(1, -1))}</p>`); }
-      else paragraph.push(line);
+      if (heading) {
+        flush();
+        const languageHeading = heading[1].length === 3 && /^(中文|English|Latine)$/.test(heading[2]);
+        if (languageHeading) language = heading[2] === "中文" ? "zh" : heading[2] === "Latine" ? "la" : "en";
+        const className = languageHeading ? ` class="language-${language}"` : "";
+        blocks.push(`<h${heading[1].length}${className}>${esc(heading[2])}</h${heading[1].length}>`);
+      } else if (item) { if (paragraph.length) flush(); list.push(item[1]); }
+      else if (/^\*[^*]+\*$/.test(line)) { flush(); blocks.push(`<p class="about-lead${language ? ` language-${language}` : ""}">${esc(line.slice(1, -1))}</p>`); }
+      else { if (!paragraph.length) paragraphLanguage = language; paragraph.push(line); }
     }
     flush();
-    $("aboutMain").innerHTML = `<div class="day-heading"><p class="eyebrow">ABOUT · 關於</p></div><article class="about-section">${blocks.join("")}</article>`;
+    target.innerHTML = `<div class="day-heading"><p class="eyebrow">${eyebrow}</p></div><article class="about-section">${blocks.join("")}</article>`;
   }
   async function renderAbout() {
     const response = await fetch("about.md", { cache: "no-cache" });
     if (!response.ok) throw new Error("About content unavailable");
-    renderMarkdown(await response.text());
+    renderMarkdown(await response.text(), $("aboutMain"), "ABOUT · 關於");
+  }
+  async function renderPrayers() {
+    const response = await fetch("mass/prayers.md", { cache: "no-cache" });
+    if (!response.ok) throw new Error("Prayer content unavailable");
+    const sections = [];
+    let section = null;
+    let language = "";
+    for (const rawLine of (await response.text()).split(/\r?\n/)) {
+      const line = rawLine.trim();
+      const heading = /^(#{1,3})\s+(.+)$/.exec(line);
+      if (heading?.[1] === "##") {
+        section = { id: sections.length === 0 ? "before" : "after", title: heading[2], content: [] };
+        sections.push(section);
+        language = "";
+      } else if (section && heading?.[1] === "###") {
+        language = heading[2] === "中文" ? "zh" : heading[2] === "Latine" ? "la" : heading[2] === "English" ? "en" : "";
+        section.content.push(`<h3 class="language-${language}">${esc(heading[2])}</h3>`);
+      } else if (section && line) {
+        const italic = /^\*([^*]+)\*$/.exec(line);
+        section.content.push(`<p class="${italic ? "about-lead " : ""}language-${language}">${esc(italic ? italic[1] : line)}</p>`);
+      }
+    }
+    $("prayersMain").innerHTML = `<div class="day-heading"><p class="eyebrow">PRAYERS · 禱文</p></div>${sections.map((item) => `<article class="about-section prayer-section" data-section="${item.id}"><h2>${esc(item.title)}</h2>${item.content.join("")}</article>`).join("")}`;
   }
   async function renderMass() {
     const [zhResponse, enResponse, laResponse] = await Promise.all([
@@ -185,6 +220,8 @@
   $("next").onclick = () => show(addDays(current, 1));
   $("datePicker").onchange = (event) => show(event.target.value);
   $("massLanguage").onchange = (e) => { settings.massLanguage = e.target.value; save(); applySettings(); };
+  $("prayersLanguage").onchange = (e) => { settings.prayersLanguage = e.target.value; save(); applySettings(); };
+  $("prayerSection").onchange = (e) => { settings.prayerSection = e.target.value; save(); applySettings(); };
   $("themeToggle").onclick = () => { settings.theme = settings.theme === "dark" ? "light" : "dark"; save(); applySettings(); };
 
   document.querySelectorAll(".nav-tab").forEach((tab) => tab.onclick = () => {
@@ -194,20 +231,23 @@
       item.toggleAttribute("aria-current", active);
     });
     const mass = tab.dataset.view === "mass";
-    settings.view = mass ? "mass" : "readings";
+    const prayers = tab.dataset.view === "prayers";
+    settings.view = mass ? "mass" : prayers ? "prayers" : "readings";
     if (tab.dataset.view === "about") settings.view = "about";
     save();
-    $("readingsView").hidden = mass || tab.dataset.view === "about";
+    $("readingsView").hidden = mass || prayers || tab.dataset.view === "about";
     $("massView").hidden = !mass;
+    $("prayersView").hidden = !prayers;
     $("aboutView").hidden = tab.dataset.view !== "about";
-    reveal(mass ? $("massView") : tab.dataset.view === "about" ? $("aboutView") : $("readingsView"));
+    reveal(mass ? $("massView") : prayers ? $("prayersView") : tab.dataset.view === "about" ? $("aboutView") : $("readingsView"));
     if (mass && !$("massMain").children.length) renderMass().catch(() => { $("massMain").innerHTML = `<p class="error-card">Mass texts could not be loaded.</p>`; });
+    if (prayers && !$("prayersMain").querySelector("h1")) renderPrayers().catch(() => { $("prayersMain").innerHTML = `<p class="error-card">Prayer texts could not be loaded.</p>`; });
     if (tab.dataset.view === "about" && !$("aboutMain").querySelector("h1")) renderAbout().catch(() => { $("aboutMain").innerHTML = `<p class="error-card">About content could not be loaded.</p>`; });
   });
 
   const hash = location.hash.slice(1);
   const hashDate = validDate(hash) ? hash : hkToday();
-  const initialView = hash === "mass" || settings.view === "mass" ? "mass" : hash === "about" || settings.view === "about" ? "about" : "readings";
+  const initialView = hash === "mass" || settings.view === "mass" ? "mass" : hash === "prayers" || settings.view === "prayers" ? "prayers" : hash === "about" || settings.view === "about" ? "about" : "readings";
   applySettings();
   show(hashDate);
   if (initialView !== "readings") document.querySelector(`[data-view="${initialView}"]`).click();
