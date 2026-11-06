@@ -118,7 +118,7 @@ V. Let us give thanks to the Lord our God.
 
 **Holy, Holy, Holy Lord God of hosts. Heaven and earth are full of your glory. Hosanna in the highest. Blessed is he who comes in the name of the Lord. Hosanna in the highest.**
 
-#### Eucharistic Prayer
+### Eucharistic Prayer -- The Roman Canon
 
 To you, therefore, most merciful Father, we make humble prayer and petition through Jesus Christ, your Son, our Lord: He joins his hands and says that you accept and bless ✠ these gifts, these offerings, these holy and unblemished sacrifices, which we offer you first of all for your holy catholic Church. Be pleased to grant her peace, to guard, unite and govern her throughout the whole world, together with your servant Leo our Pope and N. our Bishop, and all those who, holding to the truth, hand on the catholic and apostolic faith.
 

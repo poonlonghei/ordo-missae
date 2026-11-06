@@ -122,7 +122,7 @@ V. Grátias ágamus Dómino Deó nóstro.
 
 Sánctus, Sánctus, Sánctus Dóminus Deús Sábaoth. Pléni súnt cǽli ét térra glória tuá. Hosánna ín excélsis. Benedíctus quí vénit ín nómine Dómini. Hosánna ín excélsis.
 
-#### Préx Eucharística
+### Préx Eucharística -- Canon Romanus
 
 Té ígítur, clémentíssíme Páter, pér Iésum Chrístum, Fíliúm tuúm, Dómínum nóstrum, súpplíces rógámús, ác pétímus, úti áccéptá hábeás ét bénedícás, hǽc ✠ dóna, hǽc múnéra, hǽc sáncta sácrifíciá íllibátá, ín prímis, quǽ tíbi ófférímus pró Écclésiá tuá sáncta cáthólíca: quám pácificáré, cústodíré, ádunáré ét régére dígnérís tóto órbe térrárúm: úna cúm fámúlo tuó Pápa nóstro Leóne ét Ántístíte nóstro ét ómníbus órthodóxís, átque cáthólícæ ét ápostólícæ fídeí cúltóríbus.
 
