@@ -74,45 +74,38 @@
   }
 
   async function renderPrayers() {
-    const response = await fetch("mass/prayers.md");
-    if (!response.ok) throw new Error("Prayer content unavailable");
-    const sections = [];
-    let section;
-    let language = "zh";
-    let paragraph = [];
+    const languageFiles = { zh: "chinese.md", en: "english.md", la: "latin.md" };
+    const sectionTitles = {
+      before: "Prayer Before Mass · 彌撒前禱文 · Oratio Ante Missam",
+      after: "Prayer After Mass · 彌撒後禱文 · Oratio Post Missam"
+    };
     const inlineMarkdown = (value) => esc(value)
       .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
       .replace(/\*([^*]+)\*/g, "<em>$1</em>");
-    const flush = () => {
-      if (!section || !paragraph.length) return;
-      const text = paragraph.join(" ");
-      const placeholder = /^\*[^*]+\*$/.test(text);
-      section.content.push(`<p class="${placeholder ? "about-lead " : ""}language-${language}">${inlineMarkdown(text)}</p>`);
-      paragraph = [];
-    };
-    for (const rawLine of (await response.text()).split(/\r?\n/)) {
-      const line = rawLine.trim();
-      const heading = /^(#{1,3})\s+(.+)$/.exec(line);
-      if (heading?.[1] === "##") {
-        flush();
-        section = { id: sections.length ? "after" : "before", title: heading[2], content: [] };
-        sections.push(section);
-        language = "zh";
-      } else if (section && heading?.[1] === "###" && /^(中文|English|Latine)$/.test(heading[2])) {
-        flush();
-        language = heading[2] === "中文" ? "zh" : heading[2] === "Latine" ? "la" : "en";
-        section.content.push(`<h3 class="language-${language}">${esc(heading[2])}</h3>`);
-      } else if (section && line.startsWith("#### ")) {
-        flush();
-        section.content.push(`<h4 class="language-${language}">${inlineMarkdown(line.slice(5))}</h4>`);
-      } else if (section && line) {
+    const renderContent = (markdown) => {
+      const blocks = [];
+      let paragraph = [];
+      const flush = () => {
+        if (!paragraph.length) return;
+        const text = paragraph.join(" ");
+        const placeholder = /^\*[^*]+\*$/.test(text);
+        blocks.push(`<p class="${placeholder ? "about-lead " : ""}">${inlineMarkdown(placeholder ? text.slice(1, -1) : text)}</p>`);
+        paragraph = [];
+      };
+      for (const rawLine of markdown.split(/\r?\n/)) {
+        const line = rawLine.trim();
+        if (!line) { flush(); continue; }
         paragraph.push(line);
-      } else {
-        flush();
       }
-    }
-    flush();
-    $("prayersMain").innerHTML = `<div class="day-heading"><p class="eyebrow">PRAYERS · 禱文</p></div>${sections.map((item) => `<article class="about-section prayer-section" data-section="${item.id}"><h2>${esc(item.title)}</h2>${item.content.join("")}</article>`).join("")}`;
+      flush();
+      return blocks.join("");
+    };
+    const section = settings.prayerSection === "after" ? "after" : "before";
+    const language = languageFiles[settings.prayersLanguage] ? settings.prayersLanguage : "zh";
+    const response = await fetch(`mass/${section}-mass/${languageFiles[language]}`, { cache: "no-cache" });
+    if (!response.ok) throw new Error("Prayer content unavailable");
+    const content = renderContent(await response.text());
+    $("prayersMain").innerHTML = `<div class="day-heading"><p class="eyebrow">PRAYERS · 禱文</p></div><article class="about-section prayer-section"><h2>${sectionTitles[section]}</h2>${content}</article>`;
     applySettings();
   }
 
@@ -140,8 +133,8 @@
   }
 
   $("massLanguage")?.addEventListener("change", (event) => { settings.massLanguage = event.target.value; save(); applySettings(); });
-  $("prayersLanguage")?.addEventListener("change", (event) => { settings.prayersLanguage = event.target.value; save(); applySettings(); });
-  $("prayerSection")?.addEventListener("change", (event) => { settings.prayerSection = event.target.value; save(); applySettings(); });
+  $("prayersLanguage")?.addEventListener("change", (event) => { settings.prayersLanguage = event.target.value; save(); renderPrayers().catch(() => {}); });
+  $("prayerSection")?.addEventListener("change", (event) => { settings.prayerSection = event.target.value; save(); renderPrayers().catch(() => {}); });
   applySettings();
 
   const page = document.body.dataset.page;

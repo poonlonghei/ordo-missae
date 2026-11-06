@@ -177,27 +177,31 @@
     renderMarkdown(await response.text(), $("aboutMain"), "ABOUT · 關於");
   }
   async function renderPrayers() {
-    const response = await fetch("mass/prayers.md", { cache: "no-cache" });
+    const languageFiles = { zh: "chinese.md", en: "english.md", la: "latin.md" };
+    const sectionTitles = {
+      before: "Prayer Before Mass · 彌撒前禱文 · Oratio Ante Missam",
+      after: "Prayer After Mass · 彌撒後禱文 · Oratio Post Missam"
+    };
+    const section = settings.prayerSection === "after" ? "after" : "before";
+    const language = languageFiles[settings.prayersLanguage] ? settings.prayersLanguage : "zh";
+    const response = await fetch(`mass/${section}-mass/${languageFiles[language]}`, { cache: "no-cache" });
     if (!response.ok) throw new Error("Prayer content unavailable");
-    const sections = [];
-    let section = null;
-    let language = "";
+    const blocks = [];
+    let paragraph = [];
+    const flush = () => {
+      if (!paragraph.length) return;
+      const text = paragraph.join(" ");
+      const placeholder = /^\*[^*]+\*$/.test(text);
+      blocks.push(`<p class="${placeholder ? "about-lead" : ""}">${esc(placeholder ? text.slice(1, -1) : text)}</p>`);
+      paragraph = [];
+    };
     for (const rawLine of (await response.text()).split(/\r?\n/)) {
       const line = rawLine.trim();
-      const heading = /^(#{1,3})\s+(.+)$/.exec(line);
-      if (heading?.[1] === "##") {
-        section = { id: sections.length === 0 ? "before" : "after", title: heading[2], content: [] };
-        sections.push(section);
-        language = "";
-      } else if (section && heading?.[1] === "###") {
-        language = heading[2] === "中文" ? "zh" : heading[2] === "Latine" ? "la" : heading[2] === "English" ? "en" : "";
-        section.content.push(`<h3 class="language-${language}">${esc(heading[2])}</h3>`);
-      } else if (section && line) {
-        const italic = /^\*([^*]+)\*$/.exec(line);
-        section.content.push(`<p class="${italic ? "about-lead " : ""}language-${language}">${esc(italic ? italic[1] : line)}</p>`);
-      }
+      if (!line) { flush(); continue; }
+      paragraph.push(line);
     }
-    $("prayersMain").innerHTML = `<div class="day-heading"><p class="eyebrow">PRAYERS · 禱文</p></div>${sections.map((item) => `<article class="about-section prayer-section" data-section="${item.id}"><h2>${esc(item.title)}</h2>${item.content.join("")}</article>`).join("")}`;
+    flush();
+    $("prayersMain").innerHTML = `<div class="day-heading"><p class="eyebrow">PRAYERS · 禱文</p></div><article class="about-section prayer-section"><h2>${esc(sectionTitles[section])}</h2>${blocks.join("")}</article>`;
   }
   async function renderMass() {
     const [zhResponse, enResponse, laResponse] = await Promise.all([
