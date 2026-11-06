@@ -6,7 +6,7 @@ Salve Regína, Mater misericórdiæ, vita, dulcédo, et spes nostra, salve. Ad t
 
 V.  Ora pro nobis, sancta Dei Génitrix.
 
-**R.  Ut digni efficiámur promissiónibus Christi.**
+***R.  Ut digni efficiámur promissiónibus Christi.***
 
 Orémus. Deus, refúgium nostrum et virtus, pópulum ad te clamántem propítius réspice; et intercedénte gloriósa, et immaculáta Vírgine Dei Genitríce María, cum beáto Ioseph, eius Sponso, ac beatis Apóstolis tuis Petro et Paulo, et ómnibus Sanctis, quas pro conversióne peccatórum, pro libertáte et exaltatióne sanctæ Matris Ecclésiæ, preces effúndimus, miséricors et benígnus exáudi. Per eúndem Christum Dóminum nostrum. Amen
 
@@ -14,4 +14,4 @@ Sancte Míchaël Archángele, defénde nos in prǽlio; contra nequítiam et ins�
 
 V.  Cor Iesu sacratíssimum.
 
-**R.  Miserére nobis. (3 times)**
+***R.  Miserére nobis. (3 times)***

@@ -61,7 +61,7 @@
     const sources = await Promise.all(responses.map((response) => response.text()));
     const parsed = sources.map(parseMass);
     $("massMain").innerHTML = parsed[0].map((section, index) => `
-      <article class="mass-section">
+      <article class="mass-section${section.title === "領主後經" ? " postcommunion-section" : section.title === "禮成" ? " dismissal-section" : ""}">
         <div class="mass-section-heading"><span class="section-number">${String(index + 1).padStart(2, "0")}</span><div><h3>${esc(section.title)}</h3><p>${esc(parsed[2][index]?.title || "")} · ${esc(parsed[1][index]?.title || "")}</p></div></div>
         <div class="mass-parts">${Array.from({ length: Math.max(section.parts.length, parsed[1][index]?.parts.length || 0, parsed[2][index]?.parts.length || 0) }, (_, partIndex) => {
           const zh = section.parts[partIndex] || { subtitle: "", text: "" };

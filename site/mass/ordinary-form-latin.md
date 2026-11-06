@@ -40,6 +40,8 @@ V. Kýrie, eleíson.
 
 #### Collécta
 
+V. Orémus.
+
 **R. Ámen.**
 
 ### Litúrgia Vérbi
@@ -207,6 +209,8 @@ V. Écce Ágnus Deí, écce quí tóllit péccata múndi. Beáti quí ád cénam
 ### Rítus Conclusiónis
 
 #### Óratio póst Communiónem
+
+V. Orémus.
 
 **R. Ámen.**
 

@@ -68,6 +68,9 @@ main { max-width: 820px; margin: auto; }
 .mass-part { padding: 14px 0 14px 34px; }
 .mass-part h4 { margin: 0 0 10px; color: var(--red); font-size: 15px; font-weight: 400; letter-spacing: .08em; }
 .mass-language-text { margin: 0; font-size: 19px; line-height: 1.9; }
+.postcommunion-section { margin-bottom: 42px; }
+.postcommunion-section .mass-section-heading,
+.dismissal-section .mass-section-heading { margin-bottom: 28px; }
 .language-la { color: var(--muted); font: 16px/1.6 var(--serif); }
 .language-en { color: var(--muted); font-size: 16px; }
 .about-page { max-width: 820px; }

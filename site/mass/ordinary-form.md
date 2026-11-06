@@ -196,11 +196,15 @@ V. Behold the Lamb of God, behold him who takes away the sins of the world. Bles
 
 **R. Lord, I am not worthy that you should enter under my roof, but only say the word and my soul shall be healed.**
 
+V. The Body of Christ
+
+**R. Amen.**
+
 ### Concluding Rites
 
 #### Prayer after Communion
 
-V. The Body of Christ
+V. Let us pray,
 
 **R. Amen.**
 
