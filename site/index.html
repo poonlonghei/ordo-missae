@@ -23,10 +23,10 @@
   </header>
 
   <nav class="primary-nav" aria-label="Main navigation">
-    <button class="nav-tab active" data-view="readings" aria-current="page">每日讀經 <span>Daily Readings</span></button>
-    <button class="nav-tab" data-view="mass">彌撒常規 <span>Order of Mass</span></button>
-    <button class="nav-tab" data-view="prayers">彌撒前後禱文 <span>Prayers</span></button>
-    <button class="nav-tab" data-view="about">關於 <span>About</span></button>
+    <a class="nav-tab active" href="index.html" aria-current="page">每日讀經 <span>Daily Readings</span></a>
+    <a class="nav-tab" href="mass.html">彌撒常規 <span>Order of Mass</span></a>
+    <a class="nav-tab" href="prayers.html">彌撒前後禱文 <span>Prayers</span></a>
+    <a class="nav-tab" href="about.html">關於 <span>About</span></a>
   </nav>
 
   <section id="readingsView" class="view">
@@ -39,45 +39,6 @@
     <footer id="src" class="source"></footer>
   </section>
 
-  <section id="massView" class="view" hidden>
-    <div class="mass-intro">
-      <p class="eyebrow">THE ROMAN MISSAL · MISSAL ROMANUM</p>
-      <h2>彌撒常規</h2>
-      <p>Ordinary of the Mass · Ordo Missæ</p>
-      <label class="mass-language">Language / 語言
-        <select id="massLanguage">
-          <option value="zh">繁體中文</option>
-          <option value="la">Latine</option>
-          <option value="en">English</option>
-        </select>
-      </label>
-    </div>
-    <main id="massMain" tabindex="-1"></main>
-  </section>
-  <section id="prayersView" class="view" hidden>
-    <div class="mass-intro">
-      <p class="eyebrow">PRAYERS · ORATIONES</p>
-      <h2>彌撒前後禱文</h2>
-      <p>Prayers Before and After Mass · Orationes Ante et Post Missam</p>
-      <label class="mass-language">Language / 語言
-        <select id="prayersLanguage">
-          <option value="zh">繁體中文</option>
-          <option value="la">Latine</option>
-          <option value="en">English</option>
-        </select>
-      </label>
-      <label class="mass-language">Prayer / 禱文
-        <select id="prayerSection">
-          <option value="before">Before Mass · 彌撒前</option>
-          <option value="after">After Mass · 彌撒後</option>
-        </select>
-      </label>
-    </div>
-    <main id="prayersMain" class="about-page" tabindex="-1"><p class="muted">載入中…</p></main>
-  </section>
-  <section id="aboutView" class="view" hidden>
-    <main id="aboutMain" class="about-page" tabindex="-1"><p class="muted">載入中…</p></main>
-  </section>
   <script src="app.js"></script>
 </body>
 </html>

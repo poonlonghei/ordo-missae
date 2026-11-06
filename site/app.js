@@ -22,14 +22,18 @@
   function applySettings() {
     document.body.classList.remove("noread");
     document.body.classList.add("noprop");
-    $("massLanguage").value = settings.massLanguage;
-    $("massMain").dataset.language = settings.massLanguage;
-    $("prayersLanguage").value = settings.prayersLanguage;
-    $("prayersMain").dataset.language = settings.prayersLanguage;
-    $("prayerSection").value = settings.prayerSection;
-    $("prayersMain").dataset.section = settings.prayerSection;
+    if ($("massLanguage")) {
+      $("massLanguage").value = settings.massLanguage;
+      $("massMain").dataset.language = settings.massLanguage;
+    }
+    if ($("prayersLanguage")) {
+      $("prayersLanguage").value = settings.prayersLanguage;
+      $("prayersMain").dataset.language = settings.prayersLanguage;
+      $("prayerSection").value = settings.prayerSection;
+      $("prayersMain").dataset.section = settings.prayerSection;
+    }
     document.documentElement.dataset.theme = settings.theme;
-    $("datePicker").value = current || hkToday();
+    if ($("datePicker")) $("datePicker").value = current || hkToday();
   }
 
   const SPEAKER = /^(領|眾|答|主祭|司鐸|讀經員|全體|信友|執事)[：:]\s*/;
@@ -219,37 +223,11 @@
   $("prev").onclick = () => show(addDays(current, -1));
   $("next").onclick = () => show(addDays(current, 1));
   $("datePicker").onchange = (event) => show(event.target.value);
-  $("massLanguage").onchange = (e) => { settings.massLanguage = e.target.value; save(); applySettings(); };
-  $("prayersLanguage").onchange = (e) => { settings.prayersLanguage = e.target.value; save(); applySettings(); };
-  $("prayerSection").onchange = (e) => { settings.prayerSection = e.target.value; save(); applySettings(); };
   $("themeToggle").onclick = () => { settings.theme = settings.theme === "dark" ? "light" : "dark"; save(); applySettings(); };
-
-  document.querySelectorAll(".nav-tab").forEach((tab) => tab.onclick = () => {
-    document.querySelectorAll(".nav-tab").forEach((item) => {
-      const active = item === tab;
-      item.classList.toggle("active", active);
-      item.toggleAttribute("aria-current", active);
-    });
-    const mass = tab.dataset.view === "mass";
-    const prayers = tab.dataset.view === "prayers";
-    settings.view = mass ? "mass" : prayers ? "prayers" : "readings";
-    if (tab.dataset.view === "about") settings.view = "about";
-    save();
-    $("readingsView").hidden = mass || prayers || tab.dataset.view === "about";
-    $("massView").hidden = !mass;
-    $("prayersView").hidden = !prayers;
-    $("aboutView").hidden = tab.dataset.view !== "about";
-    reveal(mass ? $("massView") : prayers ? $("prayersView") : tab.dataset.view === "about" ? $("aboutView") : $("readingsView"));
-    if (mass && !$("massMain").children.length) renderMass().catch(() => { $("massMain").innerHTML = `<p class="error-card">Mass texts could not be loaded.</p>`; });
-    if (prayers && !$("prayersMain").querySelector("h1")) renderPrayers().catch(() => { $("prayersMain").innerHTML = `<p class="error-card">Prayer texts could not be loaded.</p>`; });
-    if (tab.dataset.view === "about" && !$("aboutMain").querySelector("h1")) renderAbout().catch(() => { $("aboutMain").innerHTML = `<p class="error-card">About content could not be loaded.</p>`; });
-  });
 
   const hash = location.hash.slice(1);
   const hashDate = validDate(hash) ? hash : hkToday();
-  const initialView = hash === "mass" || settings.view === "mass" ? "mass" : hash === "prayers" || settings.view === "prayers" ? "prayers" : hash === "about" || settings.view === "about" ? "about" : "readings";
   applySettings();
   show(hashDate);
-  if (initialView !== "readings") document.querySelector(`[data-view="${initialView}"]`).click();
   addEventListener("popstate", () => show(validDate(location.hash.slice(1)) ? location.hash.slice(1) : hkToday()));
 })();
