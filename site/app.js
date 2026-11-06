@@ -13,6 +13,11 @@
   const addDays = (iso, n) => { const d = new Date(`${iso}T00:00:00Z`); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
   const fmtDate = (iso) => { const d = new Date(`${iso}T00:00:00Z`); return `${d.getUTCFullYear()}年${d.getUTCMonth() + 1}月${d.getUTCDate()}日 星期${WEEKDAY[d.getUTCDay()]}`; };
   const validDate = (date) => /^\d{4}-\d{2}-\d{2}$/.test(date);
+  const reveal = (element) => {
+    element.classList.remove("content-enter");
+    void element.offsetWidth;
+    element.classList.add("content-enter");
+  };
 
   function applySettings() {
     document.body.classList.remove("noread");
@@ -78,12 +83,14 @@
       if (request === requestId) {
         renderReadings(day);
         $("main").classList.remove("loading");
+        reveal($("main"));
       }
     } catch {
       if (request !== requestId) return;
       $("main").innerHTML = `<div class="error-card"><strong>${fmtDate(date)}</strong><br>這一天的讀經尚未發佈，請試試其他日期。</div>`;
       $("src").textContent = "";
       $("main").classList.remove("loading");
+      reveal($("main"));
     }
   }
 
@@ -193,6 +200,7 @@
     $("readingsView").hidden = mass || tab.dataset.view === "about";
     $("massView").hidden = !mass;
     $("aboutView").hidden = tab.dataset.view !== "about";
+    reveal(mass ? $("massView") : tab.dataset.view === "about" ? $("aboutView") : $("readingsView"));
     if (mass && !$("massMain").children.length) renderMass().catch(() => { $("massMain").innerHTML = `<p class="error-card">Mass texts could not be loaded.</p>`; });
     if (tab.dataset.view === "about" && !$("aboutMain").querySelector("h1")) renderAbout().catch(() => { $("aboutMain").innerHTML = `<p class="error-card">About content could not be loaded.</p>`; });
   });
