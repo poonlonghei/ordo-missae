@@ -78,22 +78,40 @@
     if (!response.ok) throw new Error("Prayer content unavailable");
     const sections = [];
     let section;
-    let language = "";
+    let language = "zh";
+    let paragraph = [];
+    const inlineMarkdown = (value) => esc(value)
+      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*([^*]+)\*/g, "<em>$1</em>");
+    const flush = () => {
+      if (!section || !paragraph.length) return;
+      const text = paragraph.join(" ");
+      const placeholder = /^\*[^*]+\*$/.test(text);
+      section.content.push(`<p class="${placeholder ? "about-lead " : ""}language-${language}">${inlineMarkdown(text)}</p>`);
+      paragraph = [];
+    };
     for (const rawLine of (await response.text()).split(/\r?\n/)) {
       const line = rawLine.trim();
       const heading = /^(#{1,3})\s+(.+)$/.exec(line);
       if (heading?.[1] === "##") {
+        flush();
         section = { id: sections.length ? "after" : "before", title: heading[2], content: [] };
         sections.push(section);
-        language = "";
-      } else if (section && heading?.[1] === "###") {
+        language = "zh";
+      } else if (section && heading?.[1] === "###" && /^(中文|English|Latine)$/.test(heading[2])) {
+        flush();
         language = heading[2] === "中文" ? "zh" : heading[2] === "Latine" ? "la" : "en";
         section.content.push(`<h3 class="language-${language}">${esc(heading[2])}</h3>`);
+      } else if (section && line.startsWith("#### ")) {
+        flush();
+        section.content.push(`<h4 class="language-${language}">${inlineMarkdown(line.slice(5))}</h4>`);
       } else if (section && line) {
-        const italic = /^\*([^*]+)\*$/.exec(line);
-        section.content.push(`<p class="${italic ? "about-lead " : ""}language-${language}">${esc(italic ? italic[1] : line)}</p>`);
+        paragraph.push(line);
+      } else {
+        flush();
       }
     }
+    flush();
     $("prayersMain").innerHTML = `<div class="day-heading"><p class="eyebrow">PRAYERS · 禱文</p></div>${sections.map((item) => `<article class="about-section prayer-section" data-section="${item.id}"><h2>${esc(item.title)}</h2>${item.content.join("")}</article>`).join("")}`;
     applySettings();
   }

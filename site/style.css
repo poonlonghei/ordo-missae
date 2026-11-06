@@ -58,6 +58,7 @@ main { max-width: 820px; margin: auto; }
 .mass-intro h2 { margin: 9px 0 3px; font-size: 34px; font-weight: 400; }
 .mass-intro > p:last-of-type { margin: 0; color: var(--muted); font-style: italic; }
 .mass-language { display: inline-flex; align-items: center; gap: 10px; margin-top: 20px; color: var(--muted); font: 11px var(--sans); letter-spacing: .08em; }
+.mass-language + .mass-language { margin-left: 18px; }
 .mass-language select { border: 1px solid var(--line); border-radius: 999px; padding: 8px 28px 8px 12px; color: var(--ink); background: var(--paper-2); font: 13px var(--sans); }
 .mass-section { padding-bottom: 20px; margin-bottom: 30px; }
 .mass-section-heading { display: flex; gap: 16px; align-items: start; margin-bottom: 22px; }
@@ -97,6 +98,7 @@ main { max-width: 820px; margin: auto; }
   .primary-nav::-webkit-scrollbar { display: none; }
   .nav-tab { flex: 0 0 auto; font-size: 14px; } .nav-tab span { display: block; margin: 4px 0 0; }
   .view { padding-top: 20px; padding-bottom: 56px; }
+  .mass-language + .mass-language { margin-left: 0; }
   .day-heading h2, .mass-intro h2 { font-size: 26px; } .section-head small { font-size: 11px; }
   .mass-part { padding-left: 0; }
   .date-bar { gap: 6px; margin-bottom: 24px; padding: 9px 7px; border-radius: 13px; }
