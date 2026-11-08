@@ -1,4 +1,4 @@
-# Órdo Míssæ
+# Ordo Míssæ
 
 ### Rítus Initiáles
 
@@ -36,7 +36,11 @@ V. Kýrie, eleíson.
 
 #### Glória
 
-**Glória ín excélsis Deó ét ín térra páx homínibus bónæ volúntatis. Laúdamus té, benedícimus té, adóramus té, glorifícamus té, grátias ágimus tíbi própter mágnam glóriam tuám, Dómine Deús, Réx cæléstis, Deús Páter omnípotens. Dómine Fíli unigénite, Iésu Chríste, Dómine Deús, Ágnus Deí, Fílius Pátris, quí tóllis péccata múndi, misérere nóbis; quí tóllis péccata múndi, súscipe deprecatiónem nóstram; quí sédes ád déxteram Pátris, misérere nóbis. Quóniam tú sólus Sánctus, tú sólus Dóminus, tú sólus Altíssimus, Iésu Chríste, cúm Sáncto Spíritu: ín glória Deí Pátris. Ámen.**
+**Glória ín excélsis Deó ét ín térra páx homínibus bónæ volúntatis. Laúdamus té, benedícimus té, adóramus té, glorifícamus té, grátias ágimus tíbi própter mágnam glóriam tuám, Dómine Deús, Réx cæléstis, Deús Páter omnípotens.**
+
+**Dómine Fíli unigénite, Iésu Chríste, Dómine Deús, Ágnus Deí, Fílius Pátris, quí tóllis péccata múndi, misérere nóbis; quí tóllis péccata múndi, súscipe deprecatiónem nóstram; quí sédes ád déxteram Pátris, misérere nóbis.**
+
+**Quóniam tú sólus Sánctus, tú sólus Dóminus, tú sólus Altíssimus, Iésu Chríste, cúm Sáncto Spíritu: ín glória Deí Pátris. Ámen.**
 
 #### Collécta
 
@@ -83,6 +87,12 @@ V. Vérbum Dómini.
 #### Hómilia
 
 #### Sýmbolum
+
+**Crédo in únum Deum, Pátrem omnipoténtem, factórem cǽli et térræ, visibílium ómnium et invisibílium. Et in únum Dóminum Iésum Chrístum, Fílium Dei unigénitum. Et ex Pátre nátum ánte ómnia sǽcula. Deum de Deo, Lúmen de Lúmine, Deum vérum de Deo véro. Génitum, non fáctum, consubstantiálem Pátri: per quem ómnia fácta sunt. Qui própter nos hómines et própter nóstram salútem descéndit de cǽlis. Et incarnátus est de Spíritu Sáncto ex María Vírgine: Et hómo fáctus est.**
+
+**Crucifíxus étiam pro nóbis: sub Póntio Piláto pássus, et sepúltus est. Et resurréxit tértia die, secúndum Scriptúras. Et ascéndit in cǽlum: sédet ad déxteram Pátris. Et íterum ventúrus est cum glória iudicáre vívos et mórtuos: cuius régni non érit fínis.**
+
+**Et in Spíritum Sánctum, Dóminum et vivificántem: qui ex Pátre Filióque procédit. Qui cum Pátre et Fílio símul adorátur et conglorificátur: qui locútus est per Prophétas. Et únam sánctam cathólicam et apostólicam Ecclésiam. Confíteor únum baptísma in remissiónem peccatórum. Et exspécto resurrectiónem mortuórum. Et vítam ventúri sǽculi. Ámen.**
 
 #### Óratio Univérsalis
 
