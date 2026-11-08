@@ -216,15 +216,13 @@ V. Écce Ágnus Deí, écce quí tóllit péccata múndi. Beáti quí ád cénam
 
 *(Sánguis Chrísti cústódiát mé ín vítam ǽtérnám. Ámen.)*
 
-### Rítus Conclusiónis
-
-#### Óratio póst Communiónem
+### Óratio póst Communiónem
 
 V. Orémus.
 
 **R. Ámen.**
 
-#### Benedíctio ét Dimíssio
+### Rítus Conclusiónis
 
 V. Dóminus vobíscum.
 

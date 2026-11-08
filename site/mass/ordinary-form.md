@@ -200,15 +200,13 @@ V. The Body of Christ
 
 **R. Amen.**
 
-### Concluding Rites
-
-#### Prayer after Communion
+### Prayer after Communion
 
 V. Let us pray,
 
 **R. Amen.**
 
-#### Blessing and Dismissal
+### Concluding Rites
 
 V. The Lord be with you.
 
